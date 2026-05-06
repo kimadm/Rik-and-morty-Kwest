@@ -1,35 +1,86 @@
-import type { DialogueChoice } from '../types/dialogue';
+import type { ChoiceCondition, QuestChoice } from '../types/quest';
 import type { GameState } from '../types/gameState';
 
-const clampChaos = (chaos: number) => Math.min(10, Math.max(0, chaos));
+const MIN_CHAOS = 0;
+const MAX_CHAOS = 10;
 
-export function applyChoiceToState(state: GameState, choice: DialogueChoice): GameState {
-  const effects = choice.effects;
+export const clampChaos = (chaos: number) => Math.min(MAX_CHAOS, Math.max(MIN_CHAOS, chaos));
 
-  if (!effects) {
+export function isConditionMet(state: GameState, condition: ChoiceCondition): boolean {
+  if (condition.hasItem && !state.inventory.includes(condition.hasItem)) {
+    return false;
+  }
+
+  if (condition.lacksItem && state.inventory.includes(condition.lacksItem)) {
+    return false;
+  }
+
+  if (condition.flag && !state.flags[condition.flag]) {
+    return false;
+  }
+
+  if (condition.notFlag && state.flags[condition.notFlag]) {
+    return false;
+  }
+
+  if (condition.minChaos !== undefined && state.chaos < condition.minChaos) {
+    return false;
+  }
+
+  if (condition.maxChaos !== undefined && state.chaos > condition.maxChaos) {
+    return false;
+  }
+
+  if (
+    condition.minRelationship &&
+    state.relationships[condition.minRelationship.id] < condition.minRelationship.value
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+export function isChoiceAvailable(state: GameState, choice: QuestChoice): boolean {
+  return choice.conditions?.every((condition) => isConditionMet(state, condition)) ?? true;
+}
+
+export function applyChoiceToState(state: GameState, choice: QuestChoice): GameState {
+  if (!isChoiceAvailable(state, choice)) {
     return state;
   }
 
-  const nextState: GameState = {
+  const effects = choice.effects;
+  const removedItems = new Set(effects?.removeItems ?? []);
+  const existingItems = state.inventory.filter((item) => !removedItems.has(item));
+  const inventory = [...existingItems];
+
+  effects?.addItems?.forEach((item) => {
+    if (!inventory.includes(item)) {
+      inventory.push(item);
+    }
+  });
+
+  const relationshipDeltas = effects?.relationships ?? {};
+  const relationships: GameState['relationships'] = { ...state.relationships };
+
+  Object.entries(relationshipDeltas).forEach(([id, delta]) => {
+    const relationshipId = id as keyof GameState['relationships'];
+    relationships[relationshipId] = (relationships[relationshipId] ?? 0) + (delta ?? 0);
+  });
+
+  return {
     ...state,
-    chaos: clampChaos(state.chaos + (effects.chaosDelta ?? 0)),
-    inventory: effects.addItem && !state.inventory.includes(effects.addItem)
-      ? [...state.inventory, effects.addItem]
-      : state.inventory,
-    flags: effects.setFlag
+    chaos: clampChaos(state.chaos + (effects?.chaosDelta ?? 0)),
+    inventory,
+    flags: effects?.setFlags
       ? {
           ...state.flags,
-          [effects.setFlag]: true,
+          ...effects.setFlags,
         }
       : state.flags,
-    relationships: effects.relationship
-      ? {
-          ...state.relationships,
-          [effects.relationship.id]: state.relationships[effects.relationship.id] + effects.relationship.delta,
-        }
-      : state.relationships,
-    currentScene: state.currentScene,
+    relationships,
+    currentScene: choice.nextScene ?? state.currentScene,
+    currentEnding: choice.ending ?? state.currentEnding,
   };
-
-  return nextState;
 }

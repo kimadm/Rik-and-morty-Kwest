@@ -1,13 +1,9 @@
-import type { InventoryItemId } from '../game/types/gameState';
+import { questItems } from '../game/data/items';
+import type { InventoryItemId } from '../game/types/quest';
 
 interface InventoryBarProps {
   items: InventoryItemId[];
 }
-
-const itemLabels: Record<InventoryItemId, string> = {
-  'broken-gadget': 'Broken Gadget',
-  'portal-spark': 'Portal Spark',
-};
 
 export function InventoryBar({ items }: InventoryBarProps) {
   return (
@@ -18,8 +14,8 @@ export function InventoryBar({ items }: InventoryBarProps) {
           <span className="empty-slot">Empty pockets</span>
         ) : (
           items.map((item) => (
-            <span className="inventory-item" key={item}>
-              {itemLabels[item]}
+            <span className="inventory-item" key={item} title={questItems[item].description}>
+              {questItems[item].name}
             </span>
           ))
         )}

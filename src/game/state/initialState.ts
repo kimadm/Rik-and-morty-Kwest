@@ -11,6 +11,9 @@ export const initialGameState: GameState = {
     morty: 0,
     summer: 0,
     jerry: 0,
+    livingManual: 0,
+    blipBlop: 0,
+    council: 0,
   },
   currentScene: 'garage',
 };
