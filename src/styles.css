@@ -1,0 +1,228 @@
+:root {
+  color: #f2fbff;
+  background: #070a12;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+button {
+  font: inherit;
+}
+
+.app-shell {
+  width: min(1280px, 100%);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.app-header,
+.game-layout,
+.choice-list,
+.meter-label,
+.relationship-row {
+  display: flex;
+}
+
+.app-header {
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: #7fffd4;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: clamp(2rem, 4vw, 4rem);
+  line-height: 0.9;
+}
+
+h2 {
+  margin-bottom: 12px;
+  font-size: 1rem;
+}
+
+.game-layout {
+  align-items: stretch;
+  gap: 18px;
+}
+
+.phaser-shell {
+  min-height: 540px;
+  flex: 1 1 760px;
+  overflow: hidden;
+  border: 1px solid rgba(127, 255, 212, 0.28);
+  border-radius: 20px;
+  background: #05070e;
+  box-shadow: 0 24px 80px rgba(0, 255, 170, 0.08);
+}
+
+.phaser-shell canvas {
+  display: block;
+}
+
+.side-panel {
+  display: grid;
+  width: min(100%, 280px);
+  gap: 14px;
+}
+
+.panel {
+  border: 1px solid rgba(164, 255, 220, 0.18);
+  border-radius: 18px;
+  background: rgba(17, 24, 39, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.chaos-meter {
+  width: min(320px, 45vw);
+  padding: 16px;
+}
+
+.meter-label,
+.relationship-row {
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.meter-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.meter-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #28f29c, #f9d65c, #ff5370);
+  transition: width 180ms ease;
+}
+
+.scene-card,
+.inventory-bar,
+.relationship-card,
+.dialogue-box {
+  padding: 18px;
+}
+
+.scene-card {
+  display: grid;
+  gap: 8px;
+  color: #9fb9c7;
+}
+
+.scene-card strong {
+  color: #ffffff;
+  font-size: 1.35rem;
+  text-transform: capitalize;
+}
+
+.inventory-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.inventory-item,
+.empty-slot {
+  border-radius: 999px;
+  padding: 8px 10px;
+  background: rgba(127, 255, 212, 0.12);
+  color: #dffdf4;
+  font-size: 0.88rem;
+}
+
+.empty-slot {
+  color: #9fb9c7;
+}
+
+.relationship-row {
+  padding: 8px 0;
+  color: #c5d7df;
+  text-transform: capitalize;
+}
+
+.dialogue-box {
+  margin-top: 18px;
+}
+
+.speaker {
+  margin-bottom: 8px;
+  color: #7fffd4;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dialogue-text {
+  color: #e7f8ff;
+  font-size: 1.1rem;
+  line-height: 1.55;
+}
+
+.choice-list {
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.choice-button {
+  border: 0;
+  border-radius: 999px;
+  padding: 12px 16px;
+  background: #7fffd4;
+  color: #071017;
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.choice-button:hover,
+.choice-button:focus-visible {
+  box-shadow: 0 0 0 4px rgba(127, 255, 212, 0.18);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+  .app-header,
+  .game-layout {
+    flex-direction: column;
+  }
+
+  .chaos-meter,
+  .side-panel {
+    width: 100%;
+  }
+
+  .phaser-shell {
+    width: 100%;
+    min-height: 360px;
+  }
+}
