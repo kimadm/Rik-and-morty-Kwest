@@ -1,8 +1,8 @@
-export type GameSceneKey = 'garage';
+import type { CharacterId, InventoryItemId, QuestEndingId, QuestSceneId } from './quest';
 
-export type InventoryItemId = 'portal-spark' | 'broken-gadget';
+export type GameSceneKey = QuestSceneId;
 
-export type RelationshipId = 'rick' | 'morty' | 'summer' | 'jerry';
+export type RelationshipId = CharacterId;
 
 export interface GameState {
   chaos: number;
@@ -10,4 +10,5 @@ export interface GameState {
   flags: Record<string, boolean>;
   relationships: Record<RelationshipId, number>;
   currentScene: GameSceneKey;
+  currentEnding?: QuestEndingId;
 }
