@@ -35,3 +35,20 @@
 ## Важное замечание по правам
 
 Для личного фанатского прототипа можно использовать узнаваемые образы. Для публичного или коммерческого релиза нужно заменить персонажей, названия, визуальные образы, музыку и реплики на оригинальные пародийные аналоги.
+
+## Local development
+
+Install dependencies and start the Vite development server:
+
+```bash
+npm install
+npm run dev
+```
+
+Then open the local URL printed by Vite, usually `http://localhost:5173/`.
+
+Create a production build with:
+
+```bash
+npm run build
+```
